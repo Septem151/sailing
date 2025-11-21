@@ -1,4 +1,4 @@
-package com.duckblade.osrs.sailing.util;
+package com.duckblade.osrs.sailing;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;

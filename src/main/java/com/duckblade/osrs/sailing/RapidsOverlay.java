@@ -1,6 +1,5 @@
 package com.duckblade.osrs.sailing;
 
-import com.duckblade.osrs.sailing.util.SailingUtil;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

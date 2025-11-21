@@ -48,7 +48,7 @@ public interface SailingConfig extends Config
 
 	@ConfigItem(
 		keyName = "disableSailsWhenNotAtHelm",
-		name = "Sails when at helm only",
+		name = "Sails At Helm Only",
 		description = "Deprioritizes sail options when not at the helm."
 	)
 	default boolean disableSailsWhenNotAtHelm()

@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
-import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.MenuEntryAdded;
@@ -97,13 +96,18 @@ public class SailingPlugin extends Plugin
 	@Inject
 	private RapidsOverlay rapidsOverlay;
 
+	@Inject
+	private SeaChartOverlay seaChartOverlay;
+
 	@Getter(AccessLevel.PACKAGE)
 	private final Map<Integer, GameObject> cargoHolds = new HashMap<>();
 
 	@Override
 	protected void startUp() throws Exception
 	{
-		overlayManager.add(sailingOverlay);
+		seaChartOverlay.startUp();
+		eventBus.register(seaChartOverlay);
+		overlayManager.add(seaChartOverlay);
 
 		eventBus.register(luffOverlay);
 		overlayManager.add(luffOverlay);
@@ -115,13 +119,17 @@ public class SailingPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
+		overlayManager.remove(rapidsOverlay);
+		eventBus.unregister(rapidsOverlay);
+		rapidsOverlay.shutDown();
+
 		overlayManager.remove(luffOverlay);
 		eventBus.unregister(luffOverlay);
 		luffOverlay.shutDown();
 
-		overlayManager.remove(rapidsOverlay);
-		eventBus.unregister(rapidsOverlay);
-		rapidsOverlay.shutDown();
+		overlayManager.remove(seaChartOverlay);
+		eventBus.unregister(seaChartOverlay);
+		seaChartOverlay.shutDown();
 
 		overlayManager.remove(sailingOverlay);
 
