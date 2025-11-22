@@ -1,17 +1,45 @@
-package com.duckblade.osrs.sailing;
+package com.duckblade.osrs.sailing.features;
 
+import com.duckblade.osrs.sailing.SailingConfig;
+import com.duckblade.osrs.sailing.features.util.SailingUtil;
+import com.duckblade.osrs.sailing.features.util.BoatTracker;
+import com.duckblade.osrs.sailing.model.Boat;
+import com.duckblade.osrs.sailing.model.HelmTier;
+import com.duckblade.osrs.sailing.module.PluginLifecycleComponent;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
-import lombok.RequiredArgsConstructor;
+import javax.inject.Singleton;
 import net.runelite.api.Client;
+import net.runelite.api.GameObject;
+import net.runelite.api.GameState;
+import net.runelite.api.events.GameObjectDespawned;
+import net.runelite.api.events.GameObjectSpawned;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.gameval.ObjectID;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayLayer;
+import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.OverlayUtil;
 
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-public class SailingUtil
+@Singleton
+public class RapidsOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
-	public static final Set<Integer> RAPIDS_IDS = ImmutableSet.of(
+	private static final Color COLOR_RAPID_SAFE = Color.CYAN;
+	private static final Color COLOR_RAPID_DANGER = Color.RED;
+	private static final Color COLOR_RAPID_UNKNOWN = Color.YELLOW;
+
+	private static final Set<Integer> RAPIDS_IDS = ImmutableSet.of(
 		ObjectID.SAILING_RAPIDS,
 		ObjectID.SAILING_RAPIDS_STRONG,
 		ObjectID.SAILING_RAPIDS_POWERFUL,
@@ -88,10 +116,106 @@ public class SailingUtil
 		ObjectID.SAILING_CHARTING_RAPIDS_WEISS_MELT
 	);
 
-	public static boolean isSailing(Client client)
+	private final Map<Integer, HelmTier> MIN_HELM_TIER_BY_RAPID_TYPE = ImmutableMap.<Integer, HelmTier>builder()
+		.put(ObjectID.SAILING_RAPIDS, HelmTier.IRON)
+		.put(ObjectID.SAILING_RAPIDS_STRONG, HelmTier.MITHRIL)
+		.put(ObjectID.SAILING_RAPIDS_POWERFUL, HelmTier.RUNE)
+		.build();
+
+	private final Client client;
+	private final SailingConfig config;
+	private final BoatTracker boatTracker;
+
+	private final Set<GameObject> rapids = new HashSet<>();
+
+	@Inject
+	public RapidsOverlay(Client client, SailingConfig config, BoatTracker boatTracker)
 	{
-		return client.getLocalPlayer() != null &&
-			!client.getLocalPlayer().getWorldView().isTopLevel();
+		this.client = client;
+		this.config = config;
+		this.boatTracker = boatTracker;
+
+		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
 
+	@Override
+	public boolean isEnabled(SailingConfig config)
+	{
+		return config.highlightRapids();
+	}
+
+	public void shutDown()
+	{
+		rapids.clear();
+	}
+
+	@Subscribe
+	public void onGameObjectSpawned(GameObjectSpawned e)
+	{
+		GameObject o = e.getGameObject();
+		if (RAPIDS_IDS.contains(o.getId()))
+		{
+			rapids.add(o);
+		}
+	}
+
+	@Subscribe
+	public void onGameObjectDespawned(GameObjectDespawned e)
+	{
+		rapids.remove(e.getGameObject());
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged e)
+	{
+		if (e.getGameState() == GameState.LOADING)
+		{
+			rapids.clear();
+		}
+	}
+
+	@Override
+	public Dimension render(Graphics2D graphics)
+	{
+		if (!SailingUtil.isSailing(client) || !config.highlightRapids())
+		{
+			return null;
+		}
+
+		for (GameObject rapid : rapids)
+		{
+			OverlayUtil.renderTileOverlay(graphics, rapid, "", getHighlightColor(rapid));
+		}
+
+		return null;
+	}
+
+	private Color getHighlightColor(GameObject rapid)
+	{
+		HelmTier minTier = MIN_HELM_TIER_BY_RAPID_TYPE.get(rapid.getId());
+		if (minTier == null)
+		{
+			return COLOR_RAPID_UNKNOWN;
+		}
+
+		Boat boat = boatTracker.getBoat(client.getLocalPlayer().getWorldView().getId());
+		if (boat == null)
+		{
+			return COLOR_RAPID_UNKNOWN;
+		}
+
+		HelmTier helmTier = boat.getHelmTier();
+		if (helmTier == null)
+		{
+			return COLOR_RAPID_UNKNOWN;
+		}
+
+		if (helmTier.ordinal() >= minTier.ordinal())
+		{
+			return COLOR_RAPID_SAFE;
+		}
+
+		return COLOR_RAPID_DANGER;
+	}
 }

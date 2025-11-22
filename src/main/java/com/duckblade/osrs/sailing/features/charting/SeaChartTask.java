@@ -1,4 +1,4 @@
-package com.duckblade.osrs.sailing;
+package com.duckblade.osrs.sailing.features.charting;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

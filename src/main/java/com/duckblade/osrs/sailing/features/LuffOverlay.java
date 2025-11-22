@@ -1,6 +1,10 @@
-package com.duckblade.osrs.sailing;
+package com.duckblade.osrs.sailing.features;
 
+import com.duckblade.osrs.sailing.SailingConfig;
+import com.duckblade.osrs.sailing.features.util.SailingUtil;
+import com.duckblade.osrs.sailing.features.util.BoatTracker;
 import com.duckblade.osrs.sailing.model.Boat;
+import com.duckblade.osrs.sailing.module.PluginLifecycleComponent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -19,13 +23,14 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 
 @Slf4j
 @Singleton
-public class LuffOverlay extends Overlay
+public class LuffOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
 
 	private static final String CHAT_LUFF_AVAILABILE = "You feel a gust of wind.";
 	private static final String CHAT_LUFF_PERFORMED = "You trim the sails, catching the wind for a burst of speed!";
 	private static final String CHAT_LUFF_ENDED = "The wind dies down and your sails with it.";
-
 
 	private final Client client;
 	private final SailingConfig config;
@@ -42,6 +47,12 @@ public class LuffOverlay extends Overlay
 
 		setLayer(OverlayLayer.ABOVE_SCENE);
 		setPosition(OverlayPosition.DYNAMIC);
+	}
+
+	@Override
+	public boolean isEnabled(SailingConfig config)
+	{
+		return config.highlightTrimmableSails();
 	}
 
 	@Subscribe

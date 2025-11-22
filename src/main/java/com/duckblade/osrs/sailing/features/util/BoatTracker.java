@@ -1,4 +1,4 @@
-package com.duckblade.osrs.sailing;
+package com.duckblade.osrs.sailing.features.util;
 
 import com.duckblade.osrs.sailing.model.Boat;
 import com.duckblade.osrs.sailing.model.CargoHoldTier;
@@ -6,6 +6,7 @@ import com.duckblade.osrs.sailing.model.HelmTier;
 import com.duckblade.osrs.sailing.model.HullTier;
 import com.duckblade.osrs.sailing.model.SailTier;
 import com.duckblade.osrs.sailing.model.SalvagingHookTier;
+import com.duckblade.osrs.sailing.module.PluginLifecycleComponent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -26,6 +27,7 @@ import net.runelite.client.eventbus.Subscribe;
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public class BoatTracker
+	implements PluginLifecycleComponent
 {
 
 	private static final int WORLD_ENTITY_TYPE_BOAT = 2;

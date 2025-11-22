@@ -1,6 +1,6 @@
 package com.duckblade.osrs.sailing.debugplugin;
 
-import com.duckblade.osrs.sailing.BoatTracker;
+import com.duckblade.osrs.sailing.features.util.BoatTracker;
 import com.duckblade.osrs.sailing.model.Boat;
 import java.awt.Color;
 import java.awt.Dimension;

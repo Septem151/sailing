@@ -1,17 +1,31 @@
 package com.duckblade.osrs.sailing;
 
+import java.awt.Color;
+import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
-@ConfigGroup("sailing")
+@ConfigGroup(SailingConfig.CONFIG_GROUP)
 public interface SailingConfig extends Config
 {
+
+	String CONFIG_GROUP = "sailing";
+
+	@ConfigSection(
+		name = "Barracuda Trials",
+		description = "Settings for Barracuda Trials",
+		position = 100,
+		closedByDefault = true
+	)
+	String SECTION_BARRACUDA_TRIALS = "barracudaTrials";
 
 	enum ShowChartsMode
 	{
 		NONE,
 		UNCHARTED,
+		CHARTED,
 		ALL,
 		;
 	}
@@ -54,6 +68,31 @@ public interface SailingConfig extends Config
 	default boolean disableSailsWhenNotAtHelm()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "barracudaHighlightLostCrates",
+		name = "Highlight Crates",
+		description = "Highlight lost crates that need to be collected during Barracuda Trials.",
+		section = SECTION_BARRACUDA_TRIALS,
+		position = 1
+	)
+	default boolean barracudaHighlightLostCrates()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "barracudaHighlightLostCratesColour",
+		name = "Crate Colour",
+		description = "The colour to highlight lost crates.",
+		section = SECTION_BARRACUDA_TRIALS,
+		position = 2
+	)
+	@Alpha
+	default Color barracudaHighlightLostCratesColour()
+	{
+		return Color.ORANGE;
 	}
 
 }

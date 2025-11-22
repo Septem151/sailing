@@ -27,7 +27,7 @@ public class GenerateSeaChartTasks
 		Map<Integer, String> objectNames = readConstants(OBJECT_ID_URL);
 		objectNames.putAll(readConstants(OBJECT_ID_1_URL));
 		Map<Integer, String> npcNames = readConstants(NPC_ID_URL);
-		System.setOut(new PrintStream(new FileOutputStream("src/main/java/com/duckblade/osrs/sailing/SeaChartTask.java")));
+		System.setOut(new PrintStream(new FileOutputStream("src/main/java/com/duckblade/osrs/sailing/features/charting/SeaChartTask.java")));
 
 		System.out.println("package com.duckblade.osrs.sailing;");
 		System.out.println();

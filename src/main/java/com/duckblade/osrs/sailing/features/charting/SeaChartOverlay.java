@@ -1,5 +1,8 @@
-package com.duckblade.osrs.sailing;
+package com.duckblade.osrs.sailing.features.charting;
 
+import com.duckblade.osrs.sailing.SailingConfig;
+import com.duckblade.osrs.sailing.features.util.SailingUtil;
+import com.duckblade.osrs.sailing.module.PluginLifecycleComponent;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -35,8 +38,11 @@ import net.runelite.client.util.ColorUtil;
 
 @Slf4j
 @Singleton
-public class SeaChartOverlay extends Overlay
+public class SeaChartOverlay
+	extends Overlay
+	implements PluginLifecycleComponent
 {
+
 	private static final Color COLOR_CHARTABLE_COMPLETED = ColorUtil.colorWithAlpha(Color.YELLOW, 127);
 	private static final Color COLOR_CHARTABLE_INCOMPLETE = Color.GREEN;
 
@@ -62,7 +68,13 @@ public class SeaChartOverlay extends Overlay
 		setLayer(OverlayLayer.ABOVE_SCENE);
 	}
 
-	void startUp()
+	@Override
+	public boolean isEnabled(SailingConfig config)
+	{
+		return config.showCharts() != SailingConfig.ShowChartsMode.NONE;
+	}
+
+	public void startUp()
 	{
 		for (SeaChartTask task : SeaChartTask.values())
 		{
@@ -81,10 +93,11 @@ public class SeaChartOverlay extends Overlay
 		}
 	}
 
-	void shutDown()
+	public void shutDown()
 	{
 		chartNpcs.clear();
 		chartObjects.clear();
+		tasksByLocation.clear();
 		tasksByGameObject.clear();
 		tasksByNpc.clear();
 	}
@@ -104,7 +117,8 @@ public class SeaChartOverlay extends Overlay
 			SeaChartTask task = tracked.getValue();
 
 			boolean completed = isTaskCompleted(task);
-			if (completed && mode == SailingConfig.ShowChartsMode.UNCHARTED)
+			if ((completed && mode == SailingConfig.ShowChartsMode.UNCHARTED) ||
+				(!completed && mode == SailingConfig.ShowChartsMode.CHARTED))
 			{
 				continue;
 			}
