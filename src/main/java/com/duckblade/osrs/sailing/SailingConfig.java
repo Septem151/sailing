@@ -13,10 +13,43 @@ public interface SailingConfig extends Config
 
 	String CONFIG_GROUP = "sailing";
 
+	// Config sections — keep at the top in declared order
+	@ConfigSection(
+		name = "Navigation",
+		description = "Settings for navigating the world with your ship.",
+		position = 100,
+		closedByDefault = true
+	)
+	String SECTION_NAVIGATION = "navigation";
+
+	@ConfigSection(
+		name = "Facilities",
+		description = "Settings for your ship facilities and components.",
+		position = 200,
+		closedByDefault = true
+	)
+	String SECTION_FACILITIES = "facilities";
+
+	@ConfigSection(
+		name = "Crewmates",
+		description = "Settings for your crewmates.",
+		position = 300,
+		closedByDefault = true
+	)
+	String SECTION_CREWMATES = "crewmates";
+
+	@ConfigSection(
+		name = "Menu Entry Swaps",
+		description = "Settings for Menu Entry Swaps",
+		position = 400,
+		closedByDefault = true
+	)
+	String SECTION_MES = "mes";
+
 	@ConfigSection(
 		name = "Sea Charting",
 		description = "Settings for Sea Charting",
-		position = 100,
+		position = 500,
 		closedByDefault = true
 	)
 	String SECTION_SEA_CHARTING = "seaCharting";
@@ -24,35 +57,92 @@ public interface SailingConfig extends Config
 	@ConfigSection(
 		name = "Barracuda Trials",
 		description = "Settings for Barracuda Trials",
-		position = 200,
+		position = 600,
 		closedByDefault = true
 	)
 	String SECTION_BARRACUDA_TRIALS = "barracudaTrials";
 
 	@ConfigSection(
-		name = "Menu Entry Swaps",
-		description = "Settings for Menu Entry Swaps",
-		position = 300,
-		closedByDefault = true
-	)
-	String SECTION_MES = "mes";
-
-	@ConfigSection(
 		name = "Cargo Hold Tracking",
 		description = "Settings for tracking the contents of your cargo hold.",
-		position = 400,
+		position = 700,
 		closedByDefault = true
 	)
 	String SECTION_CARGO_HOLD_TRACKING = "cargoHoldTracking";
 
-	@ConfigSection(
-		name = "Crewmates",
-		description = "Settings for your crewmates.",
-		position = 500,
-		closedByDefault = true
+	// 1. Navigation
+	@ConfigItem(
+		keyName = "highlightRapids",
+		name = "Highlight Rapids",
+		description = "Highlight rapids.",
+		section = SECTION_NAVIGATION,
+		position = 1
 	)
-	String SECTION_CREWMATES = "crewmates";
+	default boolean highlightRapids()
+	{
+		return true;
+	}
 
+	// 2. Facilities
+	@ConfigItem(
+		keyName = "highlightTrimmableSails",
+		name = "Highlight Trimmable Sails",
+		description = "Highlight sails when they require trimming.",
+		section = SECTION_FACILITIES,
+		position = 1
+	)
+	default boolean highlightTrimmableSails()
+	{
+		return true;
+	}
+
+	// 3. Crewmates
+	enum CrewmateMuteMode
+	{
+		NONE,
+		OTHER_BOATS,
+		ALL,
+		;
+	}
+
+	@ConfigItem(
+		keyName = "crewmatesMuteOverheads",
+		name = "Mute Overhead Text",
+		description = "Mutes the overhead text of crewmates.",
+		section = SECTION_CREWMATES,
+		position = 1
+	)
+	default CrewmateMuteMode crewmatesMuteOverheads()
+	{
+		return CrewmateMuteMode.NONE;
+	}
+
+	// 4. MES
+	@ConfigItem(
+		keyName = "disableSailsWhenNotAtHelm",
+		name = "Sails At Helm Only",
+		description = "Deprioritizes sail options when not at the helm.",
+		section = SECTION_MES,
+		position = 1
+	)
+	default boolean disableSailsWhenNotAtHelm()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "prioritizeCargoHold",
+		name = "Prioritize Cargo Hold",
+		description = "Make the Cargo Hold easier to click on by prioritizing it over other objects.",
+		section = SECTION_MES,
+		position = 2
+	)
+	default boolean prioritizeCargoHold()
+	{
+		return true;
+	}
+
+	// 5. Charting
 	enum ShowChartsMode
 	{
 		NONE,
@@ -113,26 +203,7 @@ public interface SailingConfig extends Config
 		return true;
 	}
 
-	@ConfigItem(
-		keyName = "highlightTrimmableSails",
-		name = "Highlight Trimmable Sails",
-		description = "Highlight sails when they require trimming."
-	)
-	default boolean highlightTrimmableSails()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "highlightRapids",
-		name = "Highlight Rapids",
-		description = "Highlight rapids."
-	)
-	default boolean highlightRapids()
-	{
-		return true;
-	}
-
+	// 6. Barracuda Trials
 	@ConfigItem(
 		keyName = "barracudaHighlightLostCrates",
 		name = "Highlight Crates",
@@ -158,30 +229,7 @@ public interface SailingConfig extends Config
 		return Color.ORANGE;
 	}
 
-	@ConfigItem(
-		keyName = "disableSailsWhenNotAtHelm",
-		name = "Sails At Helm Only",
-		description = "Deprioritizes sail options when not at the helm.",
-		section = SECTION_MES,
-		position = 1
-	)
-	default boolean disableSailsWhenNotAtHelm()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "prioritizeCargoHold",
-		name = "Prioritize Cargo Hold",
-		description = "Make the Cargo Hold easier to click on by prioritizing it over other objects.",
-		section = SECTION_MES,
-		position = 2
-	)
-	default boolean prioritizeCargoHold()
-	{
-		return true;
-	}
-
+	// 7. Cargo Hold Tracking
 	@ConfigItem(
 		keyName = "cargoHoldShowCounts",
 		name = "Show Item Count",
@@ -192,26 +240,6 @@ public interface SailingConfig extends Config
 	default boolean cargoHoldShowCounts()
 	{
 		return true;
-	}
-
-	enum CrewmateMuteMode
-	{
-		NONE,
-		OTHER_BOATS,
-		ALL,
-		;
-	}
-
-	@ConfigItem(
-		keyName = "crewmatesMuteOverheads",
-		name = "Mute Overhead Text",
-		description = "Mutes the overhead text of crewmates.",
-		section = SECTION_CREWMATES,
-		position = 1
-	)
-	default CrewmateMuteMode crewmatesMuteOverheads()
-	{
-		return CrewmateMuteMode.NONE;
 	}
 
 }
