@@ -1,6 +1,7 @@
-package com.duckblade.osrs.sailing.features;
+package com.duckblade.osrs.sailing.features.mes;
 
 import com.duckblade.osrs.sailing.SailingConfig;
+import com.duckblade.osrs.sailing.features.util.SailingUtil;
 import com.duckblade.osrs.sailing.module.PluginLifecycleComponent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,7 +23,6 @@ public class DeprioSailsOffHelm
 	private static final String MENU_TARGET_SAILS = "<col=ffff>Sails";
 
 	private final Client client;
-	private final SailingConfig config;
 
 	@Override
 	public boolean isEnabled(SailingConfig config)
@@ -33,14 +33,9 @@ public class DeprioSailsOffHelm
 	@Subscribe
 	public void onMenuEntryAdded(MenuEntryAdded e)
 	{
-		if (client.getLocalPlayer().getWorldView().isTopLevel())
+		if (!SailingUtil.isSailing(client))
 		{
 			// not in a boat
-			return;
-		}
-
-		if (!config.disableSailsWhenNotAtHelm())
-		{
 			return;
 		}
 

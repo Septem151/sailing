@@ -29,6 +29,14 @@ public interface SailingConfig extends Config
 	)
 	String SECTION_BARRACUDA_TRIALS = "barracudaTrials";
 
+	@ConfigSection(
+		name = "Menu Entry Swaps",
+		description = "Settings for Menu Entry Swaps",
+		position = 300,
+		closedByDefault = true
+	)
+	String SECTION_MES = "mes";
+
 	enum ShowChartsMode
 	{
 		NONE,
@@ -110,16 +118,6 @@ public interface SailingConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "disableSailsWhenNotAtHelm",
-		name = "Sails At Helm Only",
-		description = "Deprioritizes sail options when not at the helm."
-	)
-	default boolean disableSailsWhenNotAtHelm()
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "barracudaHighlightLostCrates",
 		name = "Highlight Crates",
 		description = "Highlight lost crates that need to be collected during Barracuda Trials.",
@@ -142,6 +140,30 @@ public interface SailingConfig extends Config
 	default Color barracudaHighlightLostCratesColour()
 	{
 		return Color.ORANGE;
+	}
+
+	@ConfigItem(
+		keyName = "disableSailsWhenNotAtHelm",
+		name = "Sails At Helm Only",
+		description = "Deprioritizes sail options when not at the helm.",
+		section = SECTION_MES,
+		position = 1
+	)
+	default boolean disableSailsWhenNotAtHelm()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "prioritizeCargoHold",
+		name = "Prioritize Cargo Hold",
+		description = "Make the Cargo Hold easier to click on by prioritizing it over other objects.",
+		section = SECTION_MES,
+		position = 2
+	)
+	default boolean prioritizeCargoHold()
+	{
+		return true;
 	}
 
 }

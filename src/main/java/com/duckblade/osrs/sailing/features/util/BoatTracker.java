@@ -73,27 +73,27 @@ public class BoatTracker
 		if (HullTier.fromGameObjectId(o.getId()) != null)
 		{
 			boat.setHull(o);
-			log.debug("found hull {}={}+{} for boat in wv {}", o.getId(), boat.getHullTier(), boat.getSizeClass(), boat.getWorldViewId());
+			log.trace("found hull {}={}+{} for boat in wv {}", o.getId(), boat.getHullTier(), boat.getSizeClass(), boat.getWorldViewId());
 		}
 		if (SailTier.fromGameObjectId(o.getId()) != null)
 		{
 			boat.setSail(o);
-			log.debug("found sail {}={} for boat in wv {}", o.getId(), boat.getSailTier(), boat.getWorldViewId());
+			log.trace("found sail {}={} for boat in wv {}", o.getId(), boat.getSailTier(), boat.getWorldViewId());
 		}
 		if (HelmTier.fromGameObjectId(o.getId()) != null)
 		{
 			boat.setHelm(o);
-			log.debug("found helm {}={} for boat in wv {}", o.getId(), boat.getHelmTier(), boat.getWorldViewId());
+			log.trace("found helm {}={} for boat in wv {}", o.getId(), boat.getHelmTier(), boat.getWorldViewId());
 		}
 		if (SalvagingHookTier.fromGameObjectId(o.getId()) != null)
 		{
 			boat.setSalvagingHook(o);
-			log.debug("found salvaging hook {}={} for boat in wv {}", o.getId(), boat.getSalvagingHookTier(), boat.getWorldViewId());
+			log.trace("found salvaging hook {}={} for boat in wv {}", o.getId(), boat.getSalvagingHookTier(), boat.getWorldViewId());
 		}
 		if (CargoHoldTier.fromGameObjectId(o.getId()) != null)
 		{
 			boat.setCargoHold(o);
-			log.debug("found cargo hold {}={} for boat in wv {}", o.getId(), boat.getCargoHoldTier(), boat.getWorldViewId());
+			log.trace("found cargo hold {}={} for boat in wv {}", o.getId(), boat.getCargoHoldTier(), boat.getWorldViewId());
 		}
 	}
 
@@ -110,27 +110,27 @@ public class BoatTracker
 		if (boat.getHull() == o)
 		{
 			boat.setHull(null);
-			log.debug("unsetting hull for boat in wv {}", boat.getWorldViewId());
+			log.trace("unsetting hull for boat in wv {}", boat.getWorldViewId());
 		}
 		if (boat.getSail() == o)
 		{
 			boat.setSail(null);
-			log.debug("unsetting sail for boat in wv {}", boat.getWorldViewId());
+			log.trace("unsetting sail for boat in wv {}", boat.getWorldViewId());
 		}
 		if (boat.getHelm() == o)
 		{
 			boat.setHelm(null);
-			log.debug("unsetting helm for boat in wv {}", boat.getWorldViewId());
+			log.trace("unsetting helm for boat in wv {}", boat.getWorldViewId());
 		}
 		if (boat.getSalvagingHook() == o)
 		{
 			boat.setSalvagingHook(null);
-			log.debug("unsetting salvaging hook for boat in wv {}", boat.getWorldViewId());
+			log.trace("unsetting salvaging hook for boat in wv {}", boat.getWorldViewId());
 		}
 		if (boat.getCargoHold() == o)
 		{
 			boat.setCargoHold(null);
-			log.debug("unsetting cargo hold for boat in wv {}", boat.getWorldViewId());
+			log.trace("unsetting cargo hold for boat in wv {}", boat.getWorldViewId());
 		}
 	}
 
