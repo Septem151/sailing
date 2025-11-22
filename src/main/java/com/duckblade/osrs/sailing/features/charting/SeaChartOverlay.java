@@ -15,15 +15,14 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
-import net.runelite.api.GameState;
 import net.runelite.api.NPC;
 import net.runelite.api.Perspective;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
-import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.events.WorldViewUnloaded;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
@@ -186,9 +185,9 @@ public class SeaChartOverlay
 	}
 
 	@Subscribe
-	public void onGameStateChanged(GameStateChanged event)
+	public void onWorldViewUnloaded(WorldViewUnloaded e)
 	{
-		if (event.getGameState() == GameState.LOADING)
+		if (e.getWorldView().isTopLevel())
 		{
 			chartObjects.clear();
 			chartNpcs.clear();

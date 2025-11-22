@@ -16,6 +16,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.WorldViewUnloaded;
 import net.runelite.api.gameval.ObjectID;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.Overlay;
@@ -245,9 +246,12 @@ public class BarracudaTrialHelper
 	}
 
 	@Subscribe
-	public void onGameStateChanged(GameStateChanged e)
+	public void onWorldViewUnloaded(WorldViewUnloaded e)
 	{
-		lostCargo.clear();
+		if (e.getWorldView().isTopLevel())
+		{
+			lostCargo.clear();
+		}
 	}
 
 	@Subscribe
