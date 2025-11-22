@@ -195,7 +195,6 @@ public class SeaChartOverlay
 		if (e.getWorldView().isTopLevel())
 		{
 			chartObjects.clear();
-			chartNpcs.clear();
 		}
 	}
 
