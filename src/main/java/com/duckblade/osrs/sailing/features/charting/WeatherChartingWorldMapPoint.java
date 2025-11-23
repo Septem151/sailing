@@ -11,7 +11,7 @@ public class WeatherChartingWorldMapPoint extends WorldMapPoint
 	{
 		super(worldPoint, icon);
 
-        setName(name);
+		setName(name);
 		setSnapToEdge(true);
 		setJumpOnClick(true);
 	}

@@ -25,7 +25,8 @@ public class SeaChartPanelOverlay
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics) {
+	public Dimension render(Graphics2D graphics)
+	{
 		if (weatherTaskTracker.getActiveTask() != null)
 		{
 			panelComponent.getChildren().add(LineComponent.builder()
